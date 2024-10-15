@@ -1,0 +1,80 @@
+﻿<Window x:Class="EAZISLab1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:eazisLab1="clr-namespace:EAZISLab1"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
+        Title="MainWindow"  WindowState="Maximized" MinWidth ="1200" MinHeight="500" Loaded="MainWindow_OnLoaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2.5*"/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment ="Left" TextAlignment="Center">
+            Перед отправлениям запроса необходимо<LineBreak/>
+            наполнить файл paths.txt в configFiles<LineBreak/>
+            списком абсолютных путей до анализируемых<LineBreak/>
+            файлов.
+        </TextBlock>
+        <StackPanel Grid.Row ="0"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="500">
+            <Label Content="Введите _текст для поиска: " Target="{Binding ElementName=InputText}"/>
+            <TextBox Name ="InputText" TextWrapping="Wrap" MinLines ="2" MaxLength="100" VerticalAlignment="Top" ToolTip="Введите текст для поиска"/>
+            <Label Content="Введите _лимит вывода: " Target="{Binding ElementName=InputLength}"/>
+            <TextBox Name="InputLength" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="InputLength_OnTextChanged"
+                     ToolTip="Введите желаемое количество результатов из корпуса текстов (Доступные значения: числа от 1 до 50)">
+                <TextBox.Text>
+                    <Binding Path="TextLength" ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <eazisLab1:InputLengthValidationRule/>
+                            </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Button Name="SendQueryButton" Content="Отправить запрос" Click="SendQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding (Validation.HasError), ElementName=InputLength}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap">Recall = <Run Text="{Binding ResponseData.Recall}"/>, Error = <Run Text="{Binding ResponseData.Error}"/>, 
+                Accuracy = <Run Text="{Binding ResponseData.Accuracy}"/>, Precision = <Run Text="{Binding ResponseData.Precision}"/>,
+            F_measure = <Run Text="{Binding ResponseData.FMeasure}"/></TextBlock>
+        </StackPanel>
+        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.Results}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - URI документа, в центральной - найденный в нем соответствующий контекст, в правой текст, совпадающий с запросом">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="URI документа" DisplayMemberBinding="{Binding Doc}"/>
+                    <GridViewColumn Header="Найденный контекст" DisplayMemberBinding="{Binding Text}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Совпадения" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding QueryText}" FontWeight="Bold"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+    </Grid>
+    
+</Window>
