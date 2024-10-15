@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using EAZIS1.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace EAZIS2.Services;
 
@@ -12,11 +11,9 @@ public class HttpClientService
     private const string HandledDocumentsSection = "paths.txt";
 
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
 
-    public HttpClientService(HttpClient httpClient, IConfiguration configuration)
+    public HttpClientService(HttpClient httpClient)
     {
-        _configuration = configuration;
         _httpClient = httpClient;
         _httpClient.BaseAddress = new Uri(BaseUrl);
     }

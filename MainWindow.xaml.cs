@@ -29,23 +29,13 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private readonly OpenFileDialog _openFileDialog = new();
     private List<byte[]> _listOfFiles = new List<byte[]>();
 
-    private IConfiguration _configuration;
-
     private Response? _responseData;
 
     public MainWindow()
     {
-        InitializeConfiguration();
-        _httpClientService = new HttpClientService(_httpClient, _configuration!);
+        _httpClientService = new HttpClientService(_httpClient);
         InitializeComponent();
         DataContext = this;
-    }
-
-    private void InitializeConfiguration()
-    {
-        _configuration = new ConfigurationBuilder()
-            .AddKeyPerFile(Path.Combine(Directory.GetCurrentDirectory(), "configFiles"))
-            .Build();
     }
 
     private async void SendQueryButton_OnClick(object sender, RoutedEventArgs e)
@@ -66,7 +56,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         var filePath = string.Empty;
 
         _openFileDialog.InitialDirectory = "c:\\";
-        _openFileDialog.Filter = "html files (*.html)|*.html|All files (*.*)|*.*";
+        _openFileDialog.Filter = "HTML files (*.html)|*.html|All files (*.*)|*.*";
         _openFileDialog.FilterIndex = 2;
         _openFileDialog.RestoreDirectory = true;
 
