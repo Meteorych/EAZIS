@@ -14,10 +14,4 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.KeyPerFile" Version="8.0.8" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="configFiles\paths.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

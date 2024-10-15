@@ -3,54 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:eazisLab1="clr-namespace:EAZIS1"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
         Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
-        Title="MainWindow"  WindowState="Maximized" MinWidth ="1200" MinHeight="500" Loaded="MainWindow_OnLoaded">
+        Title="MainWindow"  WindowState="Maximized" MinWidth ="1200" MinHeight="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="2.5*"/>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment ="Left" TextAlignment="Center">
-            Перед отправлениям запроса необходимо<LineBreak/>
-            наполнить файл paths.txt в configFiles<LineBreak/>
-            списком абсолютных путей до анализируемых<LineBreak/>
-            файлов.
-        </TextBlock>
         <StackPanel Grid.Row ="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500">
-            <Label Content="Введите _текст для поиска: " Target="{Binding ElementName=InputText}"/>
-            <TextBlock Name ="ListOfFiles" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Введите текст для поиска"/>
-            <Button Name="DownloadFileButton" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="DeepSkyBlue" ToolTip="Нажмите кнопку, чтобы добавить файл" />
-            <ComboBox ToolTip="Выберите метод определения языка в файле"></ComboBox>
-            <Button Name="SendQueryButton" Content="Отправить запрос" Click="SendQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" />
-            <TextBlock TextAlignment="Center" TextWrapping="Wrap">Recall = <Run Text="{Binding ResponseData.Recall}"/>, Error = <Run Text="{Binding ResponseData.Error}"/>, 
-                Accuracy = <Run Text="{Binding ResponseData.Accuracy}"/></TextBlock>
+            <TextBlock Text="Пути к отправленным файлам: "/>
+            <Border BorderThickness="2" BorderBrush="Black">
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <TextBlock Height="40" Name ="ListOfFilePaths" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Введите текст для поиска"/>
+                </ScrollViewer>
+            </Border>
+            <Button Name="DownloadFileButton" Height ="30" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="DeepSkyBlue" ToolTip="Нажмите кнопку, чтобы добавить файл" />
+            <Label BorderThickness ="1" VerticalContentAlignment="Bottom" BorderBrush ="Black" Content="Выберите _метод определения языка:" Target="RecognitionMethodBox"/>
+            <ComboBox SelectedIndex="0" Height="30" Name="RecognitionMethodBox" ToolTip="Выберите метод определения языка в файле" SelectionChanged="RecognitionMethodBox_OnSelectionChanged">
+                <ComboBoxItem Content="ngramm"/>
+                <ComboBoxItem Content="neuro"/>
+                <ComboBoxItem Content="alphabet"/>
+            </ComboBox>
+            <Button Name="SendQueryButton" Content="Отправить запрос" Height="30" Click="SendQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" />
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap">Precision = <Run Text="{Binding ResponseData.Precision}"/></TextBlock>
         </StackPanel>
-        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.Results}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - URI документа, в центральной - найденный в нем соответствующий контекст, в правой текст, совпадающий с запросом">
+        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.ResponseList}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - URI документа, в правой — язык текста">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="URI документа" DisplayMemberBinding="{Binding Doc}"/>
-                    <GridViewColumn Header="Найденный контекст" DisplayMemberBinding="{Binding Text}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Совпадения" Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding QueryText}" FontWeight="Bold"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                    <GridViewColumn Width="Auto" Header="Найденный контекст" DisplayMemberBinding="{Binding Language}" />
                 </GridView>
             </ListView.View>
         </ListView>
-        
     </Grid>
     
 </Window>

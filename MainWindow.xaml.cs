@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using EAZIS2.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Win32;
 
 namespace EAZIS2;
@@ -24,11 +25,22 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         }
     }
 
+    private const string FilterSettings = "HTML files (*.html)|*.html|All files (*.*)|*.*";
+
     private readonly HttpClient _httpClient = new();
     private readonly HttpClientService _httpClientService;
-    private readonly OpenFileDialog _openFileDialog = new();
-    private List<byte[]> _listOfFiles = new List<byte[]>();
+    private readonly Dictionary<string, byte[]> _listOfFiles = new();
 
+    private readonly OpenFileDialog _openFileDialog = new()
+    {
+        InitialDirectory = "d:\\",
+        FilterIndex = 1,
+        RestoreDirectory = true,
+        Filter = FilterSettings,
+        Multiselect = true
+    };
+
+    private string _recognitionMethod;
     private Response? _responseData;
 
     public MainWindow()
@@ -36,11 +48,12 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         _httpClientService = new HttpClientService(_httpClient);
         InitializeComponent();
         DataContext = this;
+        _recognitionMethod = "ngramm";
     }
 
     private async void SendQueryButton_OnClick(object sender, RoutedEventArgs e)
     {
-        //ResponseData = await _httpClientService.SendQuery(InputText.Text);
+        ResponseData = await _httpClientService.SendQuery(_listOfFiles, _recognitionMethod);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -50,25 +63,20 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private void DownloadFile_OnClick(object sender, RoutedEventArgs e)
+    private async void DownloadFile_OnClick(object sender, RoutedEventArgs e)
     {
-        var fileContent = string.Empty;
-        var filePath = string.Empty;
-
-        _openFileDialog.InitialDirectory = "c:\\";
-        _openFileDialog.Filter = "HTML files (*.html)|*.html|All files (*.*)|*.*";
-        _openFileDialog.FilterIndex = 2;
-        _openFileDialog.RestoreDirectory = true;
-
         if (_openFileDialog.ShowDialog() != true) return;
 
-        filePath = _openFileDialog.FileName;
-        var fileStream = _openFileDialog.OpenFile();
-
-        using StreamReader reader = new StreamReader(fileStream);
-
-        fileContent = reader.ReadToEnd();
-        ListOfFiles.Text += $"{filePath}\n";
+        foreach (var filePath in _openFileDialog.FileNames)
+        {
+            var fileContent = await File.ReadAllBytesAsync(filePath);
+            ListOfFilePaths.Text += $"{filePath}\n";
+            _listOfFiles.Add(filePath, fileContent);
+        }
     }
 
+    private void RecognitionMethodBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        _recognitionMethod = (RecognitionMethodBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "ngramm";
+    }
 }
