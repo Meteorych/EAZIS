@@ -45,17 +45,6 @@ public class HttpClientService
 
         throw new HttpRequestException($"Response returned {response.StatusCode} status code.");
     }
-
-    public async Task SendPathToDocuments()
-    {
-        var documentsToHandle = GetPaths();
-        await _httpClient.PostAsJsonAsync(ApiPathConstants.PathToDocumentsApi, documentsToHandle);
-    }
-
-    private string[] GetPaths()
-    {
-        return _configuration.GetSection(HandledDocumentsSection).Value?.Split(",") ?? throw new InvalidOperationException("You should configure sending documents.");
-    }
 }
 
 public class Response

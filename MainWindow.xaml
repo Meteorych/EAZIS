@@ -22,7 +22,7 @@
         </TextBlock>
         <StackPanel Grid.Row ="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500">
             <Label Content="Введите _текст для поиска: " Target="{Binding ElementName=InputText}"/>
-            <TextBlock Name ="InputText" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Введите текст для поиска"/>
+            <TextBlock Name ="ListOfFiles" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Введите текст для поиска"/>
             <Button Name="DownloadFileButton" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы добавить файл" />
             <Button Name="SendQueryButton" Content="Отправить запрос" Click="SendQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" />
             <TextBlock TextAlignment="Center" TextWrapping="Wrap">Recall = <Run Text="{Binding ResponseData.Recall}"/>, Error = <Run Text="{Binding ResponseData.Error}"/>, 
