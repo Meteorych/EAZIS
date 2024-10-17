@@ -35,7 +35,7 @@
             <TextBlock Text="Пути к отправленным файлам: "/>
             <Border BorderThickness="2" BorderBrush="Black">
                 <ScrollViewer VerticalScrollBarVisibility="Visible">
-                    <TextBlock Height="40" Name ="ListOfFilePaths" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Введите текст для поиска"/>
+                    <TextBox IsReadOnly="True" Height="40" Name ="ListOfFilePaths" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Пути до файлов к отправлению"/>
                 </ScrollViewer>
             </Border>
             <Button Name="DownloadFileButton" Height ="30" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="DeepSkyBlue" ToolTip="Нажмите кнопку, чтобы добавить файл" />
@@ -57,7 +57,7 @@
             </ListView.View>
         </ListView>
         <Button Grid.Row ="2" Name="DownloadReportButton" Content="Скачать файл с результатом" Height="30" Width="500" VerticalAlignment="Center"  
-                HorizontalAlignment="Center" Click="DownloadReportButton_OnClick" ToolTip="Файл с результатом в PDF-формате"/>
+                HorizontalAlignment="Center" Click="DownloadReportButton_OnClick" ToolTip="НАжмите на кнопку, чтобы создать файл с результатом в PDF-формате"/>
     </Grid>
     
 </Window>

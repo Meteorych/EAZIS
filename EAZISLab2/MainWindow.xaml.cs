@@ -77,6 +77,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private async void DownloadFile_OnClick(object sender, RoutedEventArgs e)
     {
+        _listOfFiles.Clear();
+        ListOfFilePaths.Clear();
         if (_openFileDialog.ShowDialog() != true) return;
 
         foreach (var filePath in _openFileDialog.FileNames)

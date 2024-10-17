@@ -7,7 +7,7 @@ namespace EAZIS2.Services;
 
 public class HttpClientService
 {
-    private const string BaseUrl = "https://43a8-46-216-174-210.ngrok-free.app";
+    private const string BaseUrl = "http://192.168.112.163";
 
     private readonly HttpClient _httpClient;
 
