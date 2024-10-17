@@ -7,7 +7,7 @@ namespace EAZIS2.Services;
 
 public class HttpClientService
 {
-    private const string BaseUrl = "https://cf68-37-214-34-15.ngrok-free.app";
+    private const string BaseUrl = "https://43a8-46-216-174-210.ngrok-free.app";
 
     private readonly HttpClient _httpClient;
 
@@ -24,7 +24,8 @@ public class HttpClientService
 
         foreach (var file in files)
         {
-            formData.Add( new ByteArrayContent(file.Value){
+            formData.Add(new ByteArrayContent(file.Value)
+            {
                 Headers = { ContentType = MediaTypeHeaderValue.Parse("text/html") }
             }, "files", file.Key);
         }
@@ -34,6 +35,7 @@ public class HttpClientService
         if (!response.IsSuccessStatusCode) throw new HttpRequestException($"Response returned {response.StatusCode} status code.");
 
         var responseContent = await response.Content.ReadFromJsonAsync<Response>();
+
         return responseContent;
     }
 }
@@ -45,10 +47,24 @@ public class Response
         ResponseList = new List<ResponseBody>();
     }
 
-    [JsonPropertyName("response")]
-    public List<ResponseBody> ResponseList { get; set; }
+    [JsonPropertyName("response")] public List<ResponseBody> ResponseList { get; set; }
 
     public float Precision { get; set; }
+
+
+    public override string ToString()
+    {
+        var result = string.Empty;
+
+        foreach (var responseBody in ResponseList)
+        {
+            result += $"{responseBody.Doc}\\t{responseBody.Language}\n";
+        }
+
+        result += $"\nPrecision: {Precision}";
+
+        return result;
+    }
 }
 
 public class ResponseBody

@@ -5,7 +5,10 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Xps.Packaging;
 using EAZIS2.Services;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.Win32;
 
 namespace EAZIS2;
@@ -25,7 +28,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         }
     }
 
-    private const string FilterSettings = "HTML files (*.html)|*.html|All files (*.*)|*.*";
+    private const string OpenFileFilterSettings = "HTML files (*.html)|*.html|All files (*.*)|*.*";
+    private const string SaveFileFilterSettings = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
 
     private readonly HttpClient _httpClient = new();
     private readonly HttpClientService _httpClientService;
@@ -36,8 +40,16 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         InitialDirectory = "d:\\",
         FilterIndex = 1,
         RestoreDirectory = true,
-        Filter = FilterSettings,
+        Filter = OpenFileFilterSettings,
         Multiselect = true
+    };
+
+    private readonly SaveFileDialog _saveFileDialog = new()
+    {
+        InitialDirectory = "d:\\",
+        FilterIndex = 1,
+        RestoreDirectory = true,
+        Filter = SaveFileFilterSettings
     };
 
     private string _recognitionMethod;
@@ -54,7 +66,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private async void SendQueryButton_OnClick(object sender, RoutedEventArgs e)
     {
         ResponseData = await _httpClientService.SendQuery(_listOfFiles, _recognitionMethod);
-    }
+     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -78,5 +90,24 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private void RecognitionMethodBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         _recognitionMethod = (RecognitionMethodBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "ngramm";
+    }
+
+    private void DownloadReportButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_saveFileDialog.ShowDialog() != true) return;
+
+        using var fs = new FileStream(_saveFileDialog.FileName, FileMode.Create);
+        using var document = new Document(PageSize.A4, 25, 25, 30, 30);
+        using var writer = PdfWriter.GetInstance(document, fs);
+        document.Open();
+        
+        foreach (var line in _responseData?.ToString().Split("\\n")!)
+        {
+            document.Add(new Paragraph(line.Replace("\\t", " ----> ")));
+        }
+
+        document.Close();
+        writer.Close();
+        fs.Close();
     }
 }
