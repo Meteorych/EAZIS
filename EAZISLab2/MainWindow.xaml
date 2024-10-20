@@ -38,13 +38,14 @@
                     <TextBox IsReadOnly="True" Height="40" Name ="ListOfFilePaths" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Пути до файлов к отправлению"/>
                 </ScrollViewer>
             </Border>
-            <Button Name="DownloadFileButton" Height ="30" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="DeepSkyBlue" ToolTip="Нажмите кнопку, чтобы добавить файл" />
-            <Label BorderThickness ="1" VerticalContentAlignment="Bottom" BorderBrush ="Black" Content="Выберите _метод определения языка:" Target="RecognitionMethodBox"/>
-            <ComboBox SelectedIndex="0" Height="30" Name="RecognitionMethodBox" ToolTip="Выберите метод определения языка в файле" SelectionChanged="RecognitionMethodBox_OnSelectionChanged">
+            <TextBlock Text="Метод определения языка: "/>
+            <ComboBox SelectedIndex="0" Height="30" Name="RecognitionMethodBox" ToolTip=" Выберите метод определения языка в файле" SelectionChanged="RecognitionMethodBox_OnSelectionChanged">
                 <ComboBoxItem Content="ngramm"/>
                 <ComboBoxItem Content="neuro"/>
                 <ComboBoxItem Content="alphabet"/>
             </ComboBox>
+            <Separator Height="20" Visibility="Hidden"/>
+            <Button Name="DownloadFileButton" Height ="30" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="DeepSkyBlue" ToolTip="Нажмите кнопку, чтобы добавить файл" />
             <Button Name="SendQueryButton" Content="Отправить запрос" Height="30" Click="SendQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" />
             <TextBlock TextAlignment="Center" TextWrapping="Wrap">Precision = <Run Text="{Binding ResponseData.Precision}"/></TextBlock>
         </StackPanel>
