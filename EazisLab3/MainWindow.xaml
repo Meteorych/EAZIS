@@ -1,0 +1,78 @@
+﻿<Window x:Class="EAZIS2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:eazis2="clr-namespace:EAZIS2"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
+        Title="MainWindow"  WindowState="Maximized" MinWidth ="1200" MinHeight="500">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DownloadButtonStyle" TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <eazis2:PrecisionVisibilityConverter x:Key="PrecisionVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height = "Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row ="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500">
+            <TextBlock Text="Пути к отправленным файлам: "/>
+            <Border BorderThickness="2" BorderBrush="Black">
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <TextBox IsReadOnly="True" Height="40" Name ="ListOfFilePaths" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Пути до файлов к отправлению"/>
+                </ScrollViewer>
+            </Border>
+            <TextBlock Text="Метод определения языка: "/>
+            <ComboBox SelectedIndex="0" Height="30" Name="RecognitionMethodBox" ToolTip=" Выберите метод определения языка в файле" SelectionChanged="RecognitionMethodBox_OnSelectionChanged">
+                <ComboBoxItem Content="ngramm"/>
+                <ComboBoxItem Content="neuro"/>
+                <ComboBoxItem Content="alphabet"/>
+                <ComboBoxItem Content="summarization"/>
+            </ComboBox>
+            <Separator Height="20" Visibility="Hidden"/>
+            <Button Name="DownloadFileButton"  Height ="30" Content="Загрузить файл" Click="DownloadFile_OnClick" Background="DeepSkyBlue" ToolTip="Нажмите кнопку, чтобы добавить файл"
+                    Style="{StaticResource DownloadButtonStyle}"/>
+            <Button Name="SendQueryButton" Content="Отправить запрос" Height="30" Click="SendQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" 
+                    Style="{StaticResource DownloadButtonStyle}"/>
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap"  Visibility="{Binding SelectedItem, ElementName=RecognitionMethodBox, Converter={StaticResource PrecisionVisibilityConverter}}">
+                Precision = <Run Text="{Binding ResponseData.Precision}"/>
+            </TextBlock>
+        </StackPanel>
+        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.ResponseList}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - URI документа, в правой — язык текста">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="URI документа" DisplayMemberBinding="{Binding Doc}"/>
+                    <GridViewColumn Width="Auto" Header="Найденный контекст" DisplayMemberBinding="{Binding Value}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Grid.Row ="2" Name="DownloadReportButton" Content="Скачать файл с результатом" Height="30" Width="500" VerticalAlignment="Center"  
+                HorizontalAlignment="Center" Click="DownloadReportButton_OnClick" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
+    </Grid>
+
+</Window>
