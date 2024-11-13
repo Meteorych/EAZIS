@@ -1,0 +1,84 @@
+﻿<Window x:Class="EAZIS2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:eazis2="clr-namespace:EAZIS2"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}" 
+        Title="MainWindow"  WindowState="Maximized" MinWidth ="1200" MinHeight="500" Background="LightGray">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DownloadButtonStyle" TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <eazis2:PrecisionVisibilityConverter x:Key="PrecisionVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height = "Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row ="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1000">
+            <TextBlock Text="Текст: " FontSize="24" FontWeight="Bold"/>
+            <Border BorderThickness="2" BorderBrush="Black">
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <TextBox Height="100" Name ="BeginningText" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="Текст, с которым ведется работа"/>
+                </ScrollViewer>
+            </Border>
+            <Separator Visibility="Hidden" Height="2"/>
+            <Button Name="SendQueryButton" Content="Отправить запрос" Height="30" Click="SendTextAnalysisQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" 
+                    Style="{StaticResource DownloadButtonStyle}"/>
+            <Separator Visibility="Hidden" Height="15"/>
+            <Button Name="TrasnlateText" Content="Перевести текст" Height="30" Click="SendTranslateQueryButton_OnClick" Background="CadetBlue" ToolTip="Нажмите кнопку, чтобы отправить запрос" 
+                Style="{StaticResource DownloadButtonStyle}"/>
+            <Separator Visibility="Hidden" Height="15"/>
+            <StackPanel Name="TreePanel" Visibility="Collapsed">
+                <TextBox Height="20" Name ="NumOfSentense" Text="1" ToolTip="Номер предложения для анализа в тексте"/>
+                <Separator Visibility="Hidden" Height="2"/>
+                <Button Name="GetTreeImageButton" Content="Показать дерево разбора предложения текста" Height="30" Background="CadetBlue" Click="GetTreeImageButton_Click" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
+            </StackPanel>
+        
+        </StackPanel>
+        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.ResponseList}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - URI документа, в правой — язык текста">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Слово" DisplayMemberBinding="{Binding Word}"/>
+                    <GridViewColumn Width="Auto" Header="Часть речи" DisplayMemberBinding="{Binding Info}" />
+                    <GridViewColumn Width="Auto" Header="Частота" DisplayMemberBinding="{Binding Freq}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row ="2">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Padding" Value="10"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Name="DownloadReportButton" Content="Скачать файл с результатом" Height="30" Background="CadetBlue" Width="500" Visibility ="Collapsed" Click="DownloadReportButton_OnClick" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
+            <Button Name="DownloadDictionary" Content="Скачать англо-немецкий словарь" Height="30" Background="CadetBlue" Width="500" Click="DownloadDictionary_Click" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
+        </StackPanel>
+    </Grid>
+
+</Window>

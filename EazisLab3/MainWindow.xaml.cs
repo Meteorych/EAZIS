@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -102,7 +103,14 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         using var document = new Document(PageSize.A4, 25, 25, 30, 30);
         using var writer = PdfWriter.GetInstance(document, fs);
         document.Open();
-        
+
+        System.Text.EncodingProvider ppp = System.Text.CodePagesEncodingProvider.Instance;
+        Encoding.RegisterProvider(ppp);
+
+        var fontPath = "C:\\Users\\Ivan.Tsitlou\\Downloads\\arial.ttf"; // Update font path as needed
+        var baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+        var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
+
         foreach (var line in _responseData?.ToString().Split("\\n")!)
         {
             document.Add(new Paragraph(line.Replace("\\t", " ----> ")));
