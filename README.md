@@ -1,2 +1,2 @@
 # Eazis labs
-Two interfaces in **WPF**. Beautiful and succinct.
+Three interfaces in **WPF**. Beautiful and succinct.
