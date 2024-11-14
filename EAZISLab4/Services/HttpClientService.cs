@@ -8,7 +8,7 @@ namespace EAZIS4.Services;
 
 public class HttpClientService
 {
-    private const string BaseUrl = "https://93fa-37-214-25-2.ngrok-free.app";
+    private const string BaseUrl = "https://8f62-80-79-118-244.ngrok-free.app";
 
     private readonly HttpClient _httpClient;
 
@@ -65,7 +65,7 @@ public class Response
 {
     public Response()
     {
-        ResponseList = new ObservableCollection<ResponseBody>();
+        ResponseList = [];
     }
 
     [JsonPropertyName("nltk")]

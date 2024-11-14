@@ -50,13 +50,13 @@
             <Separator Visibility="Hidden" Height="2"/>
             <Button Name="SendQueryButton" Content="Отправить запрос" Height="30" Click="SendTextAnalysisQueryButton_OnClick" Background="GreenYellow" ToolTip="Нажмите кнопку, чтобы отправить запрос" 
                     Style="{StaticResource DownloadButtonStyle}"/>
-            <Separator Visibility="Hidden" Height="15"/>
+            <Separator Visibility="Hidden" Height="5"/>
             <Button Name="TrasnlateText" Content="Перевести текст" Height="30" Click="SendTranslateQueryButton_OnClick" Background="CadetBlue" ToolTip="Нажмите кнопку, чтобы отправить запрос" 
                 Style="{StaticResource DownloadButtonStyle}"/>
             <Separator Visibility="Hidden" Height="15"/>
             <StackPanel Name="TreePanel" Visibility="Collapsed">
+                <TextBlock FontWeight="Bold" Text="Номер предложения для построения дерева"/>
                 <TextBox Height="20" Name ="NumOfSentense" Text="1" ToolTip="Номер предложения для анализа в тексте"/>
-                <Separator Visibility="Hidden" Height="2"/>
                 <Button Name="GetTreeImageButton" Content="Показать дерево разбора предложения текста" Height="30" Background="CadetBlue" Click="GetTreeImageButton_Click" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
             </StackPanel>
         
@@ -76,8 +76,8 @@
                     <Setter Property="Padding" Value="10"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Name="DownloadReportButton" Content="Скачать файл с результатом" Height="30" Background="CadetBlue" Width="500" Visibility ="Collapsed" Click="DownloadReportButton_OnClick" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
-            <Button Name="DownloadDictionary" Content="Скачать англо-немецкий словарь" Height="30" Background="CadetBlue" Width="500" Click="DownloadDictionary_Click" ToolTip="Нажмите на кнопку, чтобы создать файл с результатом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
+            <Button Name="DownloadReportButton" Content="Скачать файл с отчетом" Height="30" Background="CadetBlue" Width="500" Visibility ="Collapsed" Click="DownloadReportButton_OnClick" ToolTip="Нажмите на кнопку, чтобы создать файл с отчетом в PDF-формате" Style="{StaticResource DownloadButtonStyle}"/>
+            <Button Name="DownloadDictionary" Content="Скачать англо-немецкий словарь" Height="30" Background="CadetBlue" Width="500" Click="DownloadDictionary_Click" ToolTip="Нажмите на кнопку, чтобы скачать англо-немецкий словарь" Style="{StaticResource DownloadButtonStyle}"/>
         </StackPanel>
     </Grid>
 
