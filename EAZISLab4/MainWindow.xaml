@@ -36,7 +36,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.6*"/>
             <RowDefinition Height="2.5*"/>
             <RowDefinition Height = "Auto"/>
         </Grid.RowDefinitions>
@@ -61,7 +61,7 @@
             </StackPanel>
         
         </StackPanel>
-        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.ResponseList}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - URI документа, в правой — язык текста">
+        <ListView Name="DataView" ItemsSource ="{Binding ResponseData.ResponseList}" Grid.Row="1" ToolTip="Вывод данных: в левой колонке - слово, в центральной — часть речи этого слово, в правой — частота слова в тексте">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Слово" DisplayMemberBinding="{Binding Word}"/>

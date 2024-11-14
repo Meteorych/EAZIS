@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -34,8 +33,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private readonly SaveFileDialog _saveFileDialog = new()
     {
         InitialDirectory = "d:\\",
-        FilterIndex = 1,
-        RestoreDirectory = true
+        FilterIndex = 1
     };
 
     private readonly HttpClient _httpClient = new();
@@ -125,7 +123,7 @@ public class PrecisionVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
     {
-        var selectedValue = (value as ComboBoxItem)?.Content.ToString().ToLower();
+        var selectedValue = (value as ComboBoxItem)?.Content?.ToString()?.ToLower();
         if (selectedValue == "ngramm" || selectedValue == "neuro" || selectedValue == "alphabet")
         {
             return Visibility.Visible;
